@@ -1,19 +1,29 @@
 import { Ticket, allowedStatuses } from "../models/ticket.js";   
 import { nanoid } from "nanoid";
 
+function generateTicketCode() {
+  const year = new Date().getFullYear();
+  const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+  return `TCK-${year}-${random}`;
+}
+
 // create ticket
 export const createTicket = async (req, res) => {
   try {
     const { title, description } = req.body;
+    const userId = req.user.id; // from auth middleware
     if (!title || !description) {
-      return res.status(400).json({ message: "Title and description are required." });
-    } 
-    const code = `TCK-${new Date().getFullYear()}-${nanoid(6).toUpperCase()}`;
-    const newTicket = new Ticket({ code, title, description });
-    await newTicket.save();
+      return res.status(400).json({ error: "Title and description are required" });
+    }
+    const code = generateTicketCode();
+    const ticket = new Ticket({ title, description, user: userId, code });
+    await ticket.save();
+    res.status(201).json(ticket); // <-- Always send a response
   } catch (error) {
-    console.error("Error creating ticket:", error);
-    res.status(500).json({ message: "Internal server error" });
+    if (error.code === 11000) {
+      return res.status(400).json({ error: "Duplicate ticket code. Please try again." });
+    }
+    res.status(500).json({ error: error.message }); // <-- Always send a response
   }         
 };
 // get all tickets
@@ -92,4 +102,16 @@ export const deleteTicket = async (req, res) => {
     console.error("Error deleting ticket:", error);
     res.status(500).json({ message: "Internal server error" });
   } 
+};
+
+
+// get api for get tickets by user id
+export const getUserTickets = async (req, res) => {
+  try {
+    const userId = req.user.id; // from isAuthenticated middleware      
+    const tickets = await Ticket.find({ user: userId });
+    res.status(200).json(tickets);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
