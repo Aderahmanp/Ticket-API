@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import ticketRoutes from './src/routes/ticket.js';
 import usersRoutes from './src/routes/user.js';
+import testRoutes from './src/routes/test.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ const mongoUrl = process.env.MONGODB_URL;
 // Mount ticket routes
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/users", usersRoutes);
+app.use("/api/test", testRoutes); // Routes for testing purposes
 
 const startServer = async () => {
     try {
