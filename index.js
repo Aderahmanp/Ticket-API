@@ -1,8 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config();
 import express from 'express';
 import mongoose from 'mongoose';
 import ticketRoutes from './src/routes/ticket.js';
+import usersRoutes from './src/routes/user.js';
 
 const app = express();
 
@@ -16,8 +15,7 @@ const mongoUrl = process.env.MONGODB_URL;
 
 // Mount ticket routes
 app.use("/api/tickets", ticketRoutes);
-
-app.use(express.json());
+app.use("/api/users", usersRoutes);
 
 const startServer = async () => {
     try {

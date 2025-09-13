@@ -1,9 +1,5 @@
 // models/user.model.js
-const mongoose = require("mongoose");
-
-// TODO: Define the AddressSchema, for example:
-// const AddressSchema = new mongoose.Schema({ street: String, city: String });
-
+import mongoose from "mongoose";
 const UserSchema = new mongoose.Schema(
   {
     // identitas & kredensial
@@ -42,7 +38,11 @@ const UserSchema = new mongoose.Schema(
     profile: {
       phone: String,
       avatarUrl: String,
-      // address: AddressSchema, // This will cause an error as AddressSchema is not defined.
+      address: String,
+      gender: {
+        type: String,
+        enum: ["male", "female"],
+      },
     },
     // audit trail
     lastLoginAt: { type: Date },
@@ -51,5 +51,5 @@ const UserSchema = new mongoose.Schema(
 );
  
 const User = mongoose.model("User", UserSchema);
- 
-module.exports = { User };
+
+export { User };

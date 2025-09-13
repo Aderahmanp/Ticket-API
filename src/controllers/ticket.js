@@ -1,4 +1,3 @@
-// help me to create function for create ticket, get all tickets, get single ticket, update ticket, delete ticket
 import { Ticket, allowedStatuses } from "../models/ticket.js";   
 import { nanoid } from "nanoid";
 
@@ -12,7 +11,6 @@ export const createTicket = async (req, res) => {
     const code = `TCK-${new Date().getFullYear()}-${nanoid(6).toUpperCase()}`;
     const newTicket = new Ticket({ code, title, description });
     await newTicket.save();
-    res.status(201).json(newTicket);
   } catch (error) {
     console.error("Error creating ticket:", error);
     res.status(500).json({ message: "Internal server error" });

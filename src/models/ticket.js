@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 const allowedStatuses = ["open", "in_progress", "resolved", "closed"];
 
@@ -19,4 +19,4 @@ const TicketSchema = new Schema(
 
 const Ticket = model("Ticket", TicketSchema);
 
-module.exports = { Ticket, allowedStatuses };
+export { Ticket, allowedStatuses };
