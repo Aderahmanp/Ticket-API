@@ -1,5 +1,7 @@
-import mongoose from "mongoose";
-const { Schema, model, Types } = mongoose;
+const mongoose = require("mongoose");
+const { Schema, model } = mongoose;
+const allowedStatuses = ["open", "in_progress", "resolved", "closed"];
+
 const TicketSchema = new Schema(
   {
     code: { type: String, unique: true, index: true }, // ex: TCK-2025-AB12CD
@@ -7,7 +9,7 @@ const TicketSchema = new Schema(
     description: { type: String, required: true },
     status: {
       type: String,
-      enum: ["open", "in_progress", "resolved", "closed"],
+      enum: allowedStatuses,
       default: "open",
       index: true,
     },
@@ -15,7 +17,6 @@ const TicketSchema = new Schema(
   { timestamps: true },
 );
 
-export const Ticket = model("Ticket", TicketSchema);
+const Ticket = model("Ticket", TicketSchema);
 
-
-
+module.exports = { Ticket, allowedStatuses };
